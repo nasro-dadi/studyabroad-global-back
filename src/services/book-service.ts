@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { searchQuerySchema } from "../schemas/search-schema";
 import { fetchWithParams } from "../utils/fetch-utils";
 
 interface Book {
@@ -8,13 +10,19 @@ interface Book {
   first_sentence?: string[];
 }
 
-export const searchBooks = async (q: string, limit: number, offset: number) => {
-  const url = "https://openlibrary.org/search.json";
+type SearchParams = z.infer<typeof searchQuerySchema>;
+
+export const searchBooks = async (searchParams: SearchParams) => {
+  const validated = searchQuerySchema.parse(searchParams);
+
+  const url = process.env.OPENLIBRARY_API_URL ?? "";
+
   const params = {
-    q,
+    q: validated.q,
     fields: "title,author_name,publish_year,ratings_count,first_sentence",
-    limit,
-    offset,
+    limit: validated.limit,
+    offset: validated.page,
+    sort: validated.sort,
   };
 
   const response = await fetchWithParams(url, params);
