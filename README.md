@@ -4,6 +4,10 @@
 
 This is the backend service for the Study Abroad Global application. It is built using Node.js, Express, and TypeScript.
 
+## Frontend Repository
+
+[Frontend Repository](https://github.com/nasro-dadi/studyabroad-global-front)
+
 ## Installation
 
 To install the dependencies, run:
